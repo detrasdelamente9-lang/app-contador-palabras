@@ -1,100 +1,210 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contador de Palabras, Caracteres y Tiempo de Lectura</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2933945571854055" crossorigin="anonymous"></script>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f3f4f6; color: #1f2937; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        header { text-align: center; margin-bottom: 24px; }
-        h1 { font-size: 1.875rem; font-weight: 800; color: #111827; margin-bottom: 8px; }
-        .subtitle { color: #6b7280; font-size: 1rem; }
-        .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 24px; }
-        textarea { width: 100%; min-height: 200px; padding: 16px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; resize: vertical; font-family: inherit; transition: border-color 0.2s; }
-        textarea:focus { outline: none; border-color: #3b82f6; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-top: 24px; }
-        .stat-box { background: #f9fafb; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid #e5e7eb; }
-        .stat-value { font-size: 2rem; font-weight: 700; color: #2563eb; }
-        .stat-label { font-size: 0.875rem; color: #6b7280; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
-        .ad-slot { background: #f3f4f6; border: 1px dashed #d1d5db; border-radius: 8px; padding: 20px; text-align: center; color: #6b7280; margin: 24px 0; min-height: 90px; display: flex; align-items: center; justify-content: center; }
-        .recommendation { background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 12px; padding: 24px; text-align: center; }
-        .recommendation a { color: #b45309; font-weight: 600; text-decoration: none; }
-        .recommendation a:hover { text-decoration: underline; }
-        footer { text-align: center; margin-top: 32px; color: #9ca3af; font-size: 0.875rem; }
-        @media (max-width: 640px) { .container { padding: 16px; } h1 { font-size: 1.5rem; } .stat-value { font-size: 1.5rem; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contador de Palabras, Caracteres y Tiempo de Lectura</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2933945571854055" crossorigin="anonymous"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:#0a0a0f;
+    color:#e0e0e0;
+    min-height:100vh;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(0,255,255,0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 50%, rgba(255,0,255,0.05) 0%, transparent 50%);
+  }
+  .container{max-width:900px;margin:0 auto;padding:20px}
+
+  /* Header */
+  header{text-align:center;padding:30px 0 20px}
+  header h1{
+    font-size:2rem;
+    background:linear-gradient(90deg,#00ffff,#ff00ff);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    text-shadow:0 0 30px rgba(0,255,255,0.3);
+    letter-spacing:2px;
+  }
+  header p{color:#888;margin-top:8px;font-size:0.95rem}
+
+  /* Ads */
+  .ad-block{
+    background:#111;border:1px solid #1a1a2e;border-radius:8px;
+    padding:10px;margin:15px 0;text-align:center;min-height:90px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ad-block ins{display:block!important;margin:0 auto}
+
+  /* Main card */
+  .card{
+    background:linear-gradient(135deg,#111 0%,#16162a 100%);
+    border:1px solid #1e1e3a;border-radius:16px;
+    padding:25px;box-shadow:0 0 40px rgba(0,255,255,0.05);
+  }
+  .card h2{
+    font-size:1.1rem;color:#00ffff;margin-bottom:15px;
+    text-transform:uppercase;letter-spacing:1px;
+    border-bottom:1px solid #1e1e3a;padding-bottom:10px;
+  }
+
+  /* Textarea */
+  textarea{
+    width:100%;min-height:200px;background:#0d0d15;
+    color:#e0e0e0;border:1px solid #2a2a4a;border-radius:10px;
+    padding:16px;font-size:1rem;resize:vertical;
+    font-family:inherit;line-height:1.6;transition:border-color .3s;
+  }
+  textarea:focus{outline:none;border-color:#00ffff;box-shadow:0 0 15px rgba(0,255,255,0.15)}
+  textarea::placeholder{color:#555}
+
+  /* Stats grid */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:20px}
+  .stat{
+    background:#0d0d15;border:1px solid #1e1e3a;border-radius:12px;
+    padding:18px 12px;text-align:center;transition:all .3s;
+  }
+  .stat:hover{border-color:#00ffff;box-shadow:0 0 20px rgba(0,255,255,0.1)}
+  .stat .value{font-size:2rem;font-weight:700;background:linear-gradient(90deg,#00ffff,#ff00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .label{font-size:0.75rem;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:5px}
+
+  /* Progress bar for reading time */
+  .progress-bar{height:6px;background:#1a1a2e;border-radius:3px;margin-top:15px;overflow:hidden}
+  .progress-bar::after{
+    content:'';display:block;height:100%;width:var(--w,0%);
+    background:linear-gradient(90deg,#00ffff,#ff00ff);border-radius:3px;transition:width .3s;
+  }
+
+  /* Buttons */
+  .actions{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
+  button{
+    padding:10px 20px;background:transparent;color:#00ffff;
+    border:1px solid #00ffff;border-radius:8px;cursor:pointer;
+    font-size:0.9rem;transition:all .3s;letter-spacing:.5px;
+  }
+  button:hover{background:#00ffff;color:#0a0a0f;box-shadow:0 0 20px rgba(0,255,255,0.3)}
+  button.secondary{border-color:#ff00ff;color:#ff00ff}
+  button.secondary:hover{background:#ff00ff;color:#0a0a0f;box-shadow:0 0 20px rgba(255,0,255,0.3)}
+
+  /* Amazon section */
+  .amazon-section{
+    margin-top:25px;padding:20px;
+    background:linear-gradient(135deg,#111,#1a1118);
+    border:1px solid #2a1a2e;border-radius:12px;text-align:center;
+  }
+  .amazon-section h3{color:#ff9900;margin-bottom:10px;font-size:1rem}
+  .amazon-section a{color:#00ffff;text-decoration:none;font-weight:600}
+  .amazon-section a:hover{text-decoration:underline}
+  .amazon-badge{
+    display:inline-block;background:#ff9900;color:#000;
+    padding:4px 10px;border-radius:4px;font-size:0.75rem;font-weight:700;margin-top:8px;
+  }
+
+  /* Footer */
+  footer{text-align:center;padding:30px 0 10px;color:#444;font-size:0.8rem}
+
+  /* Responsive */
+  @media(max-width:600px){
+    header h1{font-size:1.4rem}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    textarea{min-height:150px}
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Contador de Palabras, Caracteres y Tiempo de Lectura</h1>
-            <p class="subtitle">Pega o escribe tu texto y obtén estadísticas al instante</p>
-        </header>
+<div class="container">
+  <header>
+    <h1>📝 Contador de Palabras, Caracteres y Tiempo de Lectura</h1>
+    <p>Herramienta profesional en tiempo real — Escriba o pegue su texto aquí abajo</p>
+  </header>
 
-        <div class="ad-slot">
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2933945571854055" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        </div>
+  <!-- Anuncio superior -->
+  <div class="ad-block">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2933945571854055" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
 
-        <main class="card">
-            <label for="textInput" style="display:block; font-weight:600; margin-bottom:8px; color:#374151;">Escribe o pega tu texto aquí:</label>
-            <textarea id="textInput" placeholder="Escribe tu texto..." oninput="updateStats()"></textarea>
-            
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-value" id="wordCount">0</div>
-                    <div class="stat-label">Palabras</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="charCount">0</div>
-                    <div class="stat-label">Caracteres</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="charCountNoSpace">0</div>
-                    <div class="stat-label">Sin espacios</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="readTime">0</div>
-                    <div class="stat-label">Min. lectura</div>
-                </div>
-            </div>
-        </main>
+  <div class="card">
+    <h2>✏️ Editor de Texto</h2>
+    <textarea id="input" placeholder="Escribe o pega tu texto aquí..."></textarea>
 
-        <div class="ad-slot">
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2933945571854055" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        </div>
-
-        <section class="recommendation">
-            <h3 style="font-size:1.25rem; font-weight:700; color:#92400e; margin-bottom:12px;">📚 Recomendación</h3>
-            <p style="color:#78350f; margin-bottom:12px;">¿Necesitas mejorar tu productividad y escritura?</p>
-            <a href="https://www.amazon.es/dp/B08N5WRWNW/ref=as_li_ss_il?tag=detrasdelam-21" target="_blank" rel="nofollow noopener">Ver producto recomendado en Amazon</a>
-        </section>
-
-        <footer>
-            <p>Herramienta gratuita y útil. © 2024</p>
-        </footer>
+    <div class="stats">
+      <div class="stat"><div class="value" id="words">0</div><div class="label">Palabras</div></div>
+      <div class="stat"><div class="value" id="chars">0</div><div class="label">Caracteres</div></div>
+      <div class="stat"><div class="value" id="charsNS">0</div><div class="label">Sin espacios</div></div>
+      <div class="stat"><div class="value" id="sentences">0</div><div class="label">Oraciones</div></div>
+      <div class="stat"><div class="value" id="paragraphs">0</div><div class="label">Párrafos</div></div>
+      <div class="stat"><div class="value" id="reading">0</div><div class="label">Min. lectura</div></div>
     </div>
 
-    <script>
-        function updateStats() {
-            const text = document.getElementById('textInput').value;
-            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-            const charsTotal = text.length;
-            const charsNoSpace = text.replace(/\s/g, '').length;
-            const wpm = 200;
-            const readMinutes = words / wpm;
-            const readTimeFormatted = readMinutes < 1 ? '< 1' : Math.ceil(readMinutes);
-            
-            document.getElementById('wordCount').textContent = words;
-            document.getElementById('charCount').textContent = charsTotal;
-            document.getElementById('charCountNoSpace').textContent = charsNoSpace;
-            document.getElementById('readTime').textContent = readTimeFormatted;
-        }
-        updateStats();
-    </script>
+    <div class="progress-bar" id="progress"></div>
+
+    <div class="actions">
+      <button onclick="clearText()">🗑️ Limpiar</button>
+      <button class="secondary" onclick="copyText()">📋 Copiar</button>
+      <button onclick="sampleText()">📄 Texto de ejemplo</button>
+    </div>
+  </div>
+
+  <!-- Anuncio inferior -->
+  <div class="ad-block">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2933945571854055" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Recomendación Amazon -->
+  <div class="amazon-section">
+    <h3>🔥 Recomendación: Mejora tu Productividad</h3>
+    <p>Descubre los mejores teclados mecánicos y herramientas de escritura en Amazon.</p>
+    <a href="https://www.amazon.es/s?k=teclado+mec%C3%A1nico&tag=detrasdelamen-21" target="_blank" rel="sponsored">Ver ofertas en Amazon →</a>
+    <br><span class="amazon-badge">Amazon Associates detrasdelamen-21</span>
+  </div>
+
+  <footer>© 2025 Contador de Texto — Herramienta gratuita</footer>
+</div>
+
+<script>
+const input=document.getElementById('input');
+const wordsEl=document.getElementById('words');
+const charsEl=document.getElementById('chars');
+const charsNSEl=document.getElementById('charsNS');
+const sentencesEl=document.getElementById('sentences');
+const paragraphsEl=document.getElementById('paragraphs');
+const readingEl=document.getElementById('reading');
+const progressEl=document.getElementById('progress');
+
+function count(){
+  const text=input.value;
+  const words=text.trim()?text.trim().split(/\s+/).length:0;
+  const chars=text.length;
+  const charsNS=text.replace(/\s/g,'').length;
+  const sentences=text.trim()?text.match(/[.!?]+/g)||[]:[];
+  const paragraphs=text.trim()?text.split(/\n\s*\n/).filter(p=>p.trim()).length:(chars>0?1:0);
+  const reading=((words/200)*60/60).toFixed(1);
+
+  wordsEl.textContent=words;
+  charsEl.textContent=chars;
+  charsNSEl.textContent=charsNS;
+  sentencesEl.textContent=sentences.length;
+  paragraphsEl.textContent=paragraphs;
+  readingEl.textContent=reading;
+
+  // progress based on char count relative to 10000
+  const pct=Math.min(100,(chars/10000)*100);
+  progressEl.style.setProperty('--w',pct+'%');
+}
+
+input.addEventListener('input',count);
+
+function clearText(){input.value='';count();}
+function copyText(){navigator.clipboard.writeText(input.value);input.focus();}
+function sampleText(){
+  input.value="La inteligencia artificial está transformando la forma en que creamos, trabajamos y nos comunicamos. Cada día aparecen nuevas herramientas que nos ayudan a ser más productivos. En este entorno digital, saber contar palabras, caracteres y estimar el tiempo de lectura resulta fundamental para redactar textos claros y efectivos. Ya sea para un ensayo académico, un artículo de blog o un informe profesional, esta herramienta te permite optimizar tu contenido de forma instantánea.";
+  count();
+}
+count();
+
+// Initialize ads
+(adsbygoogle=window.adsbygoogle||[]).push({});
+</script>
 </body>
 </html>
